@@ -7,7 +7,7 @@ Welcome to SubsGenie, your automated companion for fetching and updating Genshin
 - **Automatic Updates:** SubsGenie regularly checks for and retrieves the latest subscription files, ensuring your Void Terminal is always up to date.
 - **Customizable Subscriptions:** Support for a primary subscription URL along with additional ones, including the option for community-provided URLs.
 - **Gist Integration:** Seamlessly upload and manage your subscription files on GitHub Gist, keeping your configurations private and accessible.
-- **Flexible Configuration:** Tailor the service to your needs with various environment variables, allowing for detailed control over the request and upload process.
+- **Flexible Configuration:** Tailor the service to your needs with various environment variables, allowing for detailed control over the request process.
 - **Logging:** Track the operation of SubsGenie with configurable log levels, ensuring transparency and ease of troubleshooting.
 
 ## Configuration
