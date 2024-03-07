@@ -1,0 +1,34 @@
+name: Upload to Gist
+run-name: ${{ github.actor }} is working on GitHub Actions 🚀
+on:
+  workflow_dispatch:
+  schedule:
+    # 每天五点30
+    - cron: "30 5 * * *"
+jobs:
+  upload-to-gist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.22.x"
+
+      - name: Display Go version
+        run: go version
+
+      - name: Install dependencies
+        run: go mod tidy
+
+      - name: Download and Upload to Gist
+        run: go run main.go
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIST_ID: ${{ secrets.GIST_ID }}
+          CORE_SUBSCRIPTION_URL: ${{ secrets.CORE_SUBSCRIPTION_URL }}
+          CF_SUBSCRIPTION_URL: ${{ secrets.CF_SUBSCRIPTION_URL }}
+          OTHER_SUBSCRIPTION_URLS: ${{ secrets.OTHER_SUBSCRIPTION_URLS }}
+          EXTRA_PARAMS: $EXTRA_PARAMS
+          LOG_LEVEL: INFO

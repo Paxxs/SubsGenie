@@ -118,14 +118,18 @@ func readConfig() (allSubscriptions, onlyCoreAndCf, requestUrlTemplate, gistID, 
 	allSubscriptions = url.QueryEscape(strings.Join(allUrls, "|"))
 
 	// 核心和大善人
-	onlyCoreAndCf = url.QueryEscape(coreSubScription + "|" + cfSubScription)
+	onlyCoreAndCf = coreSubScription
+	if cfSubScription != "" {
+		onlyCoreAndCf += "|" + cfSubScription
+	}
+	onlyCoreAndCf = url.QueryEscape(onlyCoreAndCf)
 
-	mLog.Debug(fmt.Sprintf("编码订阅链接：\n【allSubscriptions】:%s\n【onlyCoreAndCf】:%s", allSubscriptions, onlyCoreAndCf))
+	mLog.Debug(fmt.Sprintf("编码后的订阅链接：\n【allSubscriptions】:%s\n【onlyCoreAndCf】:%s", allSubscriptions, onlyCoreAndCf))
 
 	// 生成url模板
 	requestUrlTemplate = fmt.Sprintf("%s?target=clash&url=%%s&config=%s%s", subconvertServiceUrl, configUrl, extraParams)
 
-	mLog.Debug(fmt.Sprintf("生成url模板\n【requestUrlTemplate】:%s", requestUrlTemplate))
+	mLog.Debug(fmt.Sprintf("生成的url模板\n【requestUrlTemplate】:%s", requestUrlTemplate))
 	return allSubscriptions, onlyCoreAndCf, requestUrlTemplate, gistID, githubToken
 }
 
