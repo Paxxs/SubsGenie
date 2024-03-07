@@ -38,6 +38,54 @@ To get started with SubsGenie, you need to configure the following environment v
 
 Once configured, SubsGenie will automatically manage the process of fetching the latest subscription files and uploading them to your specified gist. Ensure your system has access to the internet and the necessary permissions to execute scripts and access GitHub Gist.
 
+## GitHub Proxy Reverse Proxy Feature
+
+To assist users in regions where direct access to GitHub Gist is restricted, SubsGenie now includes a GitHub Proxy reverse proxy feature. By deploying a simple proxy service on Cloudflare Workers, users can seamlessly access the Gist content managed by SubsGenie without any barriers.
+
+### Configuration Steps
+
+1. **Navigate to the Proxy Service Directory**: Locate and enter the folder for the proxy service within the root directory of the project.
+
+2. **Install Dependencies**: `pnpm install`
+
+3. **Login to Your Cloudflare Account**: `pnpm wrangler login`
+
+Follow the prompts to log in to your Cloudflare account.
+
+4. **Create a Configuration File**: In the folder, create a `wrangler.toml` configuration file with the following content:
+
+```toml
+name = "subs-genie-worker"
+main = "src/index.ts"
+compatibility_date = "2024-03-04" # Use your deployment date
+
+[env.production]
+vars = { ENVIRONMENT = "production" }
+routes = [{ pattern = "your domain", custom_domain = true }, "your domain/*"]
+```
+
+Replace `your domain` with your actual domain information.
+
+5. **Deploy the Proxy Service**: `pnpm run deploy`
+
+This command deploys your proxy service to Cloudflare Workers.
+
+### How to Use
+
+After a successful deployment, access your Gist content via the following URL format:
+
+```
+https://your-website/api/v1/github/gist_id?name=coreAndCF.txt&user=yourGitHubUsername
+```
+
+Replace `your-website`, `gist_id`, and `yourGitHubUsername` with your actual information.
+
+With this proxy service, you can smoothly retrieve the contents uploaded by SubsGenie on a scheduled basis, regardless of whether your region supports direct access to GitHub Gist or not.
+
+---
+
+We hope this new feature will enable all users to better utilize SubsGenie, enjoying a seamless Genshin Impact Void Terminal subscription management experience.
+
 ## Contributing
 
 Contributions to SubsGenie are welcome! Whether it's feature requests, bug reports, or code contributions, please feel free to reach out or submit a pull request.

@@ -38,6 +38,57 @@ SubsGenie 是一个为原神的虚空终端（Clash M）订阅文件自动更新
 
 一旦完成配置，SubsGenie 将自动管理获取最新订阅文件并上传到你指定的 Gist 的过程。确保你的系统能够访问互联网并且具有执行脚本和访问 GitHub Gist 的必要权限。
 
+## GitHub Proxy 反向代理功能
+
+为了帮助一些地区的用户解决无法直接访问 GitHub Gist 的问题，SubsGenie 现新增了 GitHub Proxy 反向代理功能。通过在 Cloudflare Workers 上部署一个简单的代理服务，用户可以无障碍地访问由 SubsGenie 管理的 Gist 内容。
+
+### 配置步骤
+
+1. **进入代理服务目录**：在项目根目录中找到并进入代理服务所在的文件夹。
+
+2. **安装依赖**：`pnpm install`
+
+3. **登录 Cloudflare 账号**：`pnpm wrangler login`
+
+按照提示登录你的 Cloudflare 账号。
+
+4. **创建配置文件**：在文件夹内创建名为 `wrangler.toml` 的配置文件，并填写以下内容：
+
+> 如果没有，就删掉`routes` 这句话，试试用大善人送的域名。
+
+```
+name = "subs-genie-worker"
+main = "src/index.ts"
+compatibility_date = "2024-03-04" # 使用你的部署日期
+
+[env.production]
+vars = { ENVIRONMENT = "production" }
+routes = [{ pattern = "填写你的域名", custom_domain = true }, "你的域名/*"]
+```
+
+将 `填写你的域名` 替换为你实际的域名信息。
+
+5. **部署代理服务**：`pnpm run deploy`
+
+执行此命令将代理服务部署到 Cloudflare Workers。
+
+### 使用方法
+
+部署成功后，通过以下格式的网址访问你的 Gist 内容：
+
+```
+https://你的网址/api/v1/github/gist_id?name=coreAndCF.txt&user=你GitHub用户名
+```
+
+将 `你的网址`、`gist_id`、`你GitHub用户名` 替换为实际的信息。
+
+通过这个代理服务，无论你所在的地区是否直接支持访问 GitHub Gist，都能顺畅地获取 SubsGenie 定时上传的内容。
+
+---
+
+我们希望这个新功能能够帮助所有用户更好地使用 SubsGenie，享受无缝的原神虚空终端订阅管理体验。
+
+
 ## 贡献
 
 欢迎对 SubsGenie 进行贡献！无论是功能请求、错误报告还是代码贡献，请随时联系我们或提交拉取请求。
