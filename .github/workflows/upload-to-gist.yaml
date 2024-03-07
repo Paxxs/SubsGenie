@@ -8,6 +8,7 @@ on:
 jobs:
   upload-to-gist:
     runs-on: ubuntu-latest
+    environment: upload2gist
     steps:
       - uses: actions/checkout@v4
 
@@ -25,7 +26,7 @@ jobs:
       - name: Download and Upload to Gist
         run: go run main.go
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
           GIST_ID: ${{ secrets.GIST_ID }}
           CORE_SUBSCRIPTION_URL: ${{ secrets.CORE_SUBSCRIPTION_URL }}
           CF_SUBSCRIPTION_URL: ${{ secrets.CF_SUBSCRIPTION_URL }}
