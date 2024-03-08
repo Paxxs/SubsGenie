@@ -35,17 +35,17 @@ func main() {
 	mLog = MyLog.NewMyLogger()
 
 	mLog.Info(":: 读取配置")
-	allSubscriptions, onlyCoreAndCf, requestUrlTemplate, gistID, githubToken := readConfig()
+	allSubscriptions, onlyCoreAndCf, configUrl, requestUrlTemplate, gistID, githubToken := readConfig()
 
 	var configText string
 	// var err error
 	// try first with allSub
 	mLog.Info(":: 开始获取订阅 - ALL")
-	if configText, err = fetchConfig(fmt.Sprintf(requestUrlTemplate, allSubscriptions)); err != nil {
+	if configText, err = fetchConfig(fmt.Sprintf(requestUrlTemplate, allSubscriptions, configUrl)); err != nil {
 		// if the first attempt fails, try with onlyCoreAndCf
 		mLog.Info("订阅ALL获取失败：", err)
 		mLog.Info(":: 开始获取订阅 - CoreAndCF")
-		if configText, err = fetchConfig(fmt.Sprintf(requestUrlTemplate, onlyCoreAndCf)); err != nil {
+		if configText, err = fetchConfig(fmt.Sprintf(requestUrlTemplate, onlyCoreAndCf, configUrl)); err != nil {
 			fmt.Println("订阅CoreAndCF获取失败：", err)
 		}
 	}
@@ -78,7 +78,7 @@ func main() {
 // - allSubscriptions: a string containing all the subscription URLs.
 // - onlyCoreAndCf: a string containing the core and CF subscription URLs.
 // - requestUrlTemplate: a string containing the request URL template.
-func readConfig() (allSubscriptions, onlyCoreAndCf, requestUrlTemplate, gistID, githubToken string) {
+func readConfig() (allSubscriptions, onlyCoreAndCf, configUrl, requestUrlTemplate, gistID, githubToken string) {
 	coreSubScription := os.Getenv("CORE_SUBSCRIPTION_URL")
 	cfSubScription := os.Getenv("CF_SUBSCRIPTION_URL")
 	otherSubScription := os.Getenv("OTHER_SUBSCRIPTION_URLS")
@@ -87,7 +87,7 @@ func readConfig() (allSubscriptions, onlyCoreAndCf, requestUrlTemplate, gistID, 
 
 	mLog.Debug(fmt.Sprintf("读取环境变量\n【CORE_SUBSCRIPTION_URL】:%s\n【CF_SUBSCRIPTION_URL】:%s\n【OTHER_SUBSCRIPTION_URLS】:%s\n【GIST_ID】:%s\n【GITHUB_TOKEN】:%s\n", coreSubScription, cfSubScription, otherSubScription, gistID, githubToken))
 
-	configUrl := os.Getenv("CONFIG_URL")
+	configUrl = os.Getenv("CONFIG_URL")
 	extraParams := os.Getenv("EXTRA_PARAMS")
 	subconvertServiceUrl := os.Getenv("SUBCONVERT_SERVICE_URL")
 	if coreSubScription == "" {
@@ -127,10 +127,10 @@ func readConfig() (allSubscriptions, onlyCoreAndCf, requestUrlTemplate, gistID, 
 	mLog.Debug(fmt.Sprintf("编码后的订阅链接：\n【allSubscriptions】:%s\n【onlyCoreAndCf】:%s", allSubscriptions, onlyCoreAndCf))
 
 	// 生成url模板
-	requestUrlTemplate = fmt.Sprintf("%s?target=clash&url=%%s&config=%s%s", subconvertServiceUrl, configUrl, extraParams)
+	requestUrlTemplate = fmt.Sprintf("%s?target=clash&url=%%s&config=%%s%s", subconvertServiceUrl, extraParams)
 
-	mLog.Debug(fmt.Sprintf("生成的url模板\n【requestUrlTemplate】:%s", requestUrlTemplate))
-	return allSubscriptions, onlyCoreAndCf, requestUrlTemplate, gistID, githubToken
+	mLog.Info(fmt.Sprintf("生成的url模板\n【requestUrlTemplate】:%s", requestUrlTemplate))
+	return allSubscriptions, onlyCoreAndCf, configUrl, requestUrlTemplate, gistID, githubToken
 }
 
 // fetchConfig fetches the config from the given requestUrl.
@@ -138,6 +138,7 @@ func readConfig() (allSubscriptions, onlyCoreAndCf, requestUrlTemplate, gistID, 
 // requestUrl string
 // (string, error)
 func fetchConfig(requestUrl string) (string, error) {
+	mLog.Debug(":: 请求url:", requestUrl)
 	resp, err := http.Get(requestUrl)
 	if err != nil {
 		return "", err
@@ -154,7 +155,7 @@ func fetchConfig(requestUrl string) (string, error) {
 		return "", fmt.Errorf(stringBody)
 	}
 
-	if !strings.HasPrefix(stringBody, "port: 7890") {
+	if !strings.HasPrefix(stringBody, "mixed-port: 7890") {
 		fmt.Println("🫥 内容可能不对")
 	}
 	return stringBody, nil
