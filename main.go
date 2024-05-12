@@ -105,9 +105,9 @@ func readConfig() (allSubscriptions, onlyCoreAndCf, configUrl, requestUrlTemplat
 		subconvertServiceUrl = "https://api.dler.io/sub"
 	}
 
-	allUrls := []string{coreSubScription}
+	allUrls := strings.Split(coreSubScription, ",")
 	if cfSubScription != "" {
-		allUrls = append(allUrls, cfSubScription)
+		allUrls = append(allUrls, strings.Split(cfSubScription, ",")...)
 	}
 	if otherSubScription != "" {
 		allUrls = append(allUrls, strings.Split(otherSubScription, ",")...)
@@ -156,7 +156,7 @@ func fetchConfig(requestUrl string) (string, error) {
 	}
 
 	if !strings.HasPrefix(stringBody, "mixed-port: 7890") {
-		fmt.Println("🫥 内容可能不对")
+		return "内容异常", fmt.Errorf(stringBody)
 	}
 	return stringBody, nil
 }
