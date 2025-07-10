@@ -1,14 +1,17 @@
-# SubsGenie README.md
+# SubsGenie
 
-Welcome to SubsGenie, your automated companion for fetching and updating Genshin Impact Void Terminal (Clash M) subscription files with ease. SubsGenie is designed to minimize the waiting time for updating your subscriptions by automatically requesting the latest files from subconverter and uploading them to a specified gist.
+SubsGenie is an automation tool for updating and merging Clash (Mihomo) proxy subscriptions using GitHub Actions. It works by pre-processing and combining multiple subscription sources, then saving the results to GitHub Gist, significantly reducing the waiting time when clients (like Shadowrocket, Clash, etc.) fetch subscriptions.
+
+[中文文档](README_cn.md)
 
 ## Features
 
-- **Automatic Updates:** SubsGenie regularly checks for and retrieves the latest subscription files, ensuring your Void Terminal is always up to date.
-- **Customizable Subscriptions:** Support for a primary subscription URL along with additional ones, including the option for community-provided URLs.
-- **Gist Integration:** Seamlessly upload and manage your subscription files on GitHub Gist, keeping your configurations private and accessible.
-- **Flexible Configuration:** Tailor the service to your needs with various environment variables, allowing for detailed control over the request process.
-- **Logging:** Track the operation of SubsGenie with configurable log levels, ensuring transparency and ease of troubleshooting.
+- **Automated Merging and Updating**: Runs on a schedule via GitHub Actions to automatically retrieve and merge multiple subscription sources without manual intervention.
+- **Reduced Client Waiting Time**: Pre-processes subscription content and stores it in Gist, making it almost instantaneous for clients to fetch, preventing timeouts in apps like Shadowrocket on iOS which fail if waiting time is too long.
+- **Multiple Subscription Support**: Set up primary subscription URLs and additional subscription URLs to easily combine nodes from multiple sources.
+- **Gist Storage and Distribution**: Stores processed subscription files on GitHub Gist, ensuring both privacy and reliable access.
+- **Reverse Proxy Support**: Provides Cloudflare Workers reverse proxy functionality to solve access issues in regions where GitHub Gist is restricted.
+- **Flexible Configuration**: Control the merging and processing through environment variables, adjusting as needed.
 
 ## Configuration
 
@@ -40,7 +43,7 @@ Once configured, SubsGenie will automatically manage the process of fetching the
 
 ## GitHub Proxy Reverse Proxy Feature
 
-To assist users in regions where direct access to GitHub Gist is restricted, SubsGenie now includes a GitHub Proxy reverse proxy feature. By deploying a simple proxy service on Cloudflare Workers, users can seamlessly access the Gist content managed by SubsGenie without any barriers.
+To assist users in regions where direct access to GitHub Gist is restricted, SubsGenie includes a GitHub Proxy reverse proxy feature. By deploying a simple proxy service on Cloudflare Workers, users can seamlessly access the Gist content managed by SubsGenie without any barriers.
 
 ### Configuration Steps
 
@@ -80,11 +83,11 @@ https://your-website/api/v1/github/gist_id?name=coreAndCF.txt&user=yourGitHubUse
 
 Replace `your-website`, `gist_id`, and `yourGitHubUsername` with your actual information.
 
-With this proxy service, you can smoothly retrieve the contents uploaded by SubsGenie on a scheduled basis, regardless of whether your region supports direct access to GitHub Gist or not.
+With this proxy service, you can smoothly retrieve the content uploaded by SubsGenie on a scheduled basis, regardless of whether your region supports direct access to GitHub Gist or not.
 
 ---
 
-We hope this new feature will enable all users to better utilize SubsGenie, enjoying a seamless Genshin Impact Void Terminal subscription management experience.
+We hope this feature helps all users better utilize SubsGenie for their network subscription management needs.
 
 ## Contributing
 
@@ -96,4 +99,4 @@ SubsGenie is open-sourced under the MIT license. See the LICENSE file for more d
 
 ---
 
-SubsGenie: Automating your Genshin Impact Void Terminal subscription management, making your adventures in Teyvat as seamless as possible.
+SubsGenie: Automating your Clash (Mihomo) proxy subscription management for a smoother, more reliable network experience.
