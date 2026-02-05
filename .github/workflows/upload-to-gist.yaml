@@ -32,4 +32,5 @@ jobs:
           CF_SUBSCRIPTION_URL: ${{ secrets.CF_SUBSCRIPTION_URL }}
           OTHER_SUBSCRIPTION_URLS: ${{ secrets.OTHER_SUBSCRIPTION_URLS }}
           EXTRA_PARAMS: ${{ vars.EXTRA_PARAMS }}
+          CONFIG_URL: ${{ vars.CONFIG_URL }}
           LOG_LEVEL: INFO
